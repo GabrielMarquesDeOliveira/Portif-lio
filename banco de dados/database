@@ -1,0 +1,70 @@
+## 1. Tabelas e Colunas
+
+### 1.1. users
+
+- **id** (PK)
+- **name**
+- **email** (único)
+- **password_hash**
+- **created_at**
+
+### 1.2. places
+
+- **id** (PK)
+- **user_id** (FK → users.id) // Dono do lugar
+- **title**
+- **description**
+- **address**
+- **price_per_night**
+- **created_at**
+
+### 1.3. bookings
+
+- **id** (PK)
+- **user_id** (FK → users.id) // Quem reservou
+- **place_id** (FK → places.id)
+- **start_date**
+- **end_date**
+- **total_price**
+- **created_at**
+
+### 1.4. reviews
+
+- **id** (PK)
+- **user_id** (FK → users.id) // Quem avaliou
+- **booking_id** (FK → bookings.id)
+- **rating** (1-5)
+- **comment**
+- **created_at**
+
+---
+
+## 2. Relacionamentos
+
+- **users** pode cadastrar vários **places** (1:N)
+- **users** pode fazer várias **bookings** (1:N)
+- **places** pode ter várias **bookings** (1:N)
+- **bookings** pode ter uma **review** (1:1)
+- **users** pode fazer várias **reviews** (1:N)
+
+---
+
+## 3. Explicação das Decisões
+
+- **Separação clara** entre usuários, lugares, reservas e avaliações facilita manutenção e escalabilidade.
+- **Chaves estrangeiras** garantem integridade referencial e facilitam consultas (ex: todas as reservas de um usuário).
+- **Avaliações** ligadas à reserva (booking) garantem que só quem se hospedou pode avaliar.
+- **Colunas essenciais** para cada entidade, evitando redundância e facilitando futuras expansões (ex: adicionar fotos, métodos de pagamento, etc).
+
+---
+
+## 4. Exemplo de Relacionamento Visual
+
+```mermaid
+erDiagram
+    USERS ||--o{ PLACES : "cadastra"
+    USERS ||--o{ BOOKINGS : "reserva"
+    PLACES ||--o{ BOOKINGS : "é reservado em"
+    BOOKINGS ||--|{ REVIEWS : "pode ter"
+    USERS ||--o{ REVIEWS : "faz"
+```
